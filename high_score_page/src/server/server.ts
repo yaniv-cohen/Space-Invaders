@@ -33,24 +33,36 @@ app.get('/scores', (_request: any, response: any) => {
   });
 });
 
+// resets all the scores in the DB
+// app.get('/clear', (_request: any, response: any) => {
+//   console.log(typeof _request.body);
+//   let sqlString = "DELETE FROM scores; "
+//   let res = executeSQL(sqlString)
+//   // let res = sqlString
+//   response.send(res);
+
+// });
 
 app.post('/scores', (_request: any, response: any) => {
   console.log(typeof _request.body);
   let json = _request.body
   let sqlString = "INSERT INTO scores(name, score)VALUES( '"+json.name+"', "+json.score+")"
-  let res = makePostRequest(sqlString)
+  let res = executeSQL(sqlString)
   // let res = sqlString
   response.send(res);
 
 });
 
-async function makePostRequest(sqlString:string) {
+async function executeSQL(sqlString:string) {
   client.query(sqlString, (err: Error /*, res: any*/) => {
     if (err) throw err;
     return "successfuly uploaded"
   });
   return "something happened"
 }
+
+
+
 
 app.get('*', (_req, res) => {
 
