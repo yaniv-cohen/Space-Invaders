@@ -329,6 +329,7 @@ def main(stdscr):
                     player.max_ammo+=1
                     player.score+= 200
                 elif(item.type=="missile_upgrade"):
+                    player.missile_vY-=0.4
                     if(len(player.upgrade_array)>0):
                         player.missile_char = player.upgrade_array.pop(0)
                 items.array.remove(item)
@@ -360,7 +361,8 @@ def main(stdscr):
             # check if I have ammo -
             if( player.ammo > 0):
                 #create new missile object
-                new_missile = Player_missile(player.yPos   ,player.xPos + math.floor(len(ship[0])/2) ,-1,0 , player.missile_char)
+                new_missile = Player_missile(player.yPos   ,player.xPos + math.floor(len(ship[0])/2) 
+                ,player.missile_vY , player.missile_vX, player.missile_char)
                 player.add_missile(new_missile)
                 player.ammo-=1
 
