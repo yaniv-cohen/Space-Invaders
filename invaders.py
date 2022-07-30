@@ -1,14 +1,14 @@
 # #space invaders 
 # import curses
-from contextlib import nullcontext
 import time
+import curses
+from curses import wrapper
+import math
 window_width  = 80
 window_height = 40
 message_pad_height =3
 message_pad_width = window_width
-import curses
-from curses import wrapper
-import math
+
 ship  = ['@@@@@', 'l   l']
 class Aliens:
     alien_spawn_count = 4
@@ -76,8 +76,8 @@ aliens = Aliens
     
 
 class Player:
-    xPos = 20
-    yPos = 20
+    xPos = 35
+    yPos = 35
     xVelocity = 0
     yVelocity = 0
     missile_array = []
@@ -119,24 +119,24 @@ def  second_level():
         hp = 1
         type = 5
         aliens.array.append(Enemy(int(yPos), int(xPos), yV, xV, hp, type))
-def  end_screen():
+def  end_screen(message_pad):
     import requests
     import webbrowser
-    name="yaniv"
+    message_pad.addstr(0, 0, "LEVEL CLEARED!  " )
+    name="python"
     end_score = player.score
-    payload = end_score
+    # end_score = 2001
     
-    resp = requests.post("https://invaders-page.herokuapp.com/")
-    url = 'https://invaders-page.herokuapp.com/score'
+    
+    # resp = requests.post("https://invaders-page.herokuapp.com/")
+    url = 'https://invaders-page.herokuapp.com/scores'
     payload = {
             'name': name,
             'score': end_score
     }
     
-    response = requests.post(url, json = payload)
-    
-    print(response.text) # to do: delete
-    
+    # response = requests.post(url, json = payload)
+    requests.post(url, json = payload)
     webbrowser.open('https://invaders-page.herokuapp.com/')
 
     
@@ -150,7 +150,6 @@ levels_array.append(second_level)
 levels_array.append(end_screen)
 print(len(levels_array))
 time.sleep(1)
-end_screen()
 def main(stdscr):
     stdscr.clear()
 
@@ -184,16 +183,13 @@ def main(stdscr):
             message_pad.addstr(0, 40, f"SCORE:{player.score}  " )
 
             message_pad.refresh( 0,0, 0, 0, 4, window_width)
-            
             time.sleep(2)
-
-            if(len(levels_array)>0):
+            if(len(levels_array)>1):
                 message_pad.clear()
-
                 message_pad.addstr(0, 0, "STARTING NEXT LEVEL   " )
                 message_pad.addstr(0, 40, f"SCORE:{player.score}  " )
 
-                levels_array.pop()()
+                levels_array.pop(0)()
             else:
                 message_pad.clear()
 
@@ -237,19 +233,19 @@ def main(stdscr):
             #     game_win.addstr(math.floor(enemy.yPos)-1, math.floor(enemy.xPos),"##" +str(vars(enemy)))
             game_win.addstr(0,60, f"{enemy.vY} , {str(math.ceil(enemy.vY))}" )
 
-            if(enemy.vY<0 and enemy.yPos + int(math.ceil(enemy.vY)) > 0):
+            if(enemy.vY<0 and enemy.yPos + int(math.ceil(enemy.vY)) >= 0):
                 enemy.yPos += enemy.vY
 
             elif(enemy.vY >0 and enemy.yPos + math.ceil(enemy.vY) < window_height):
                 enemy.yPos += enemy.vY
             if(enemy.vX<0):
-                if(enemy.xPos + math.floor(enemy.vX) > 0):
-                    enemy.xPos += int(math.floor(enemy.vX))
+                if(enemy.xPos + math.ceil(enemy.vX) > 0):
+                    enemy.xPos += enemy.vX
                 else:
                     enemy.vX *= -1
             elif(enemy.vX > 0):
-                if( enemy.xPos + math.floor(enemy.vX) < window_width - len(ship[0])):
-                    enemy.xPos += int(math.floor(enemy.vX)) 
+                if( enemy.xPos + math.ceil(enemy.vX) < window_width - enemy.type-1):
+                    enemy.xPos += enemy.vX
                 else:
                     enemy.vX *= -1
             # enemy.yPos += enemy.vY
@@ -269,6 +265,8 @@ def main(stdscr):
                 # game_win.addstr(0, 40, "hit!" )
                 kil_enemy = target.hit(missile.missile_tier)
                 if kil_enemy:
+                    player.score += (10-target.type)*100  
+                    message_pad.addstr(0, 20, f"+{player.score}" )
                     # game_win.addstr(2, 40, "kill me!" )
                     aliens.array.remove(target)
                 player.missile_array.remove(missile)

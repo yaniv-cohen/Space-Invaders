@@ -4,6 +4,7 @@ $header-bkcolor: $primary-color;
 $header-color: white;
 $main-bkcolor: rgba(209, 209, 209, 0.542);
 $body-font: 'Roboto Mono', monospace;
+
 body {
   // background-image: url('./images/space_picture.png');
   height: 100%;
@@ -15,61 +16,74 @@ body {
   font-family: $body-font;
   // background-size: 100% 1000px;
   background-color: $primary-color;
-  header{
+
+  header {
     display: flex;
     justify-content: center;
-    color:$header-color;
+    color: $header-color;
     width: 90%;
     margin: auto;
     background-color: rgba($header-bkcolor, 0.6);
-    h1{
+
+    h1 {
       font-size: 42px;
     }
   }
-  main{
+
+  main {
     display: flex;
     justify-content: center;
     margin-top: 40px;
-    
-    #scores_div{
+    #scores_div {
 
-    background-color: $main-bkcolor;
-    width:400px;
-    padding:20px 40px;
-    .score_title_div{
+      background-color: $main-bkcolor;
+      width: 400px;
+      padding: 20px 40px 20px 40px;
       
-      text-align: center;
-      font-size: larger;
-  background-color: $main-bkcolor;
-
-    }
-      .single_score_div{
+      .score_title_div {
+        padding-bottom: 20px;
+        text-align: center;
+        font-size: larger;
         background-color: $main-bkcolor;
-        padding: 5px 10px 5px 10px;
+        text-decoration: underline;
+      }
+
+      .single_score_div {
+        background-color: $main-bkcolor;
+        padding: 10px 10px 10px 10px;
+        border-bottom: 2px solid $text-color;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        .player_name{
+        font-weight: 600;
+
+        .player_name {
           justify-self: left;
-          }
-        .score{
+        }
+
+        .score {
           justify-self: right;
-          }
+        }
       }
     }
   }
+
   color: $text-color;
+
   >.alert {
     >input {
       outline: none;
     }
   }
+
   >.select {
     margin-top: 10px;
+
     >select {
       outline: none;
     }
   }
+
   #display {
     height: 200px;
     font-size: 60px;
@@ -77,16 +91,18 @@ body {
     justify-content: center;
     align-items: center;
   }
+
   #dialog {
     display: none;
     position: fixed;
     width: 100vw;
     height: 100vh;
-    background: rgba(0,0,0,.3);
+    background: rgba(0, 0, 0, .3);
     top: 0;
     left: 0;
     justify-content: center;
     align-items: center;
+
     >.card {
       width: 300px;
       padding: 15px;
@@ -96,11 +112,13 @@ body {
       display: flex;
       align-items: center;
       flex-direction: column;
+
       #message {
         display: flex;
         justify-content: center;
         margin-bottom: 10px;
       }
+
       button {
         width: 100px;
       }
