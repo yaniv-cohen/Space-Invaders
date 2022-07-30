@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Space-Invaders</title>
+  <base href="/">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js"></script>
+</head>
+
+
+<body>
+  <header>
+    <div>
+      <h1>SPACE INVADERS</h1>
+    </div>
+  </header>
+  <main>
+    <div id="scores_div">
+      <div class="score_title_div">
+        <h1> Scores:</h1>
+      </div>
+
+      <div class="single_score_div">
+        <span class="player_name">yaniv :</span>
+        <span class="score">1000</span>
+
+      </div>
+    </div>
+  </main>
+  <div class="alert">
+    <input id="msg" type="text" value="Hey Wakka">
+    <button onclick="app.module.shout()">Say</button>
+  </div>
+  <div class="select">
+    <select id="select" onchange="app.module.updateSelect()">
+      <option>Dialog</option>
+      <option>UI</option>
+      <option>Alert</option>
+      <option>Console</option>
+    </select>
+  </div>
+  <div id="display"></div>
+  <div id="dialog">
+    <div class="card">
+      <div id="message"></div>
+      <button onclick="app.dialog.close()">Ok</button>
+    </div>
+  </div>
+
+
+</body>
+
+</html>
