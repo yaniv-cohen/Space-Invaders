@@ -1,14 +1,6 @@
 window.addEventListener('load', () => {
   getScores()
-
-  //manually enter a score -  geet good
-//   document.getElementById('postButton')?.addEventListener('click',
-//   ()=>{ setScore({ 'name': 'yaniv', 'score': Math.random()*2000 })
-// fetch('http://localhost:4000/clear')
-// } )
 });
-
-
 // fetches the scores from the server, which makes a query in the DB
 // then, add to the HTML a score_div for each score
 async function getScores() {
@@ -28,33 +20,7 @@ async function getScores() {
     new_score.append(score_span)
     scores_div?.append(new_score)
   }
-
-
-  console.log("creating ", "gggfsfds");
-
+  console.log("creating ", obj);
+  console.log(obj);
   return obj
 }
-
-
-// manual score insertion
-// function setScore(obj: any) {
-//   console.log("creating ", obj);
-
-//   const dataString = JSON.stringify(obj);
-//   console.log(obj);
-
-//   fetch('https://invaders-page.herokuapp.com/scores', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: dataString,
-//   })
-//     .then((response) => response)
-//     .then((data) => {
-//       console.log('Success:', data);
-//     })
-//     .catch((error) => {
-//       console.error('Error:', error);
-//     });
-// }

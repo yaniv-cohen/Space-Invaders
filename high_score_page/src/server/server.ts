@@ -33,16 +33,6 @@ app.get('/scores', (_request: any, response: any) => {
   });
 });
 
-// resets all the scores in the DB
-// app.get('/clear', (_request: any, response: any) => {
-//   console.log(typeof _request.body);
-//   let sqlString = "DELETE FROM scores; "
-//   let res = executeSQL(sqlString)
-//   // let res = sqlString
-//   response.send(res);
-
-// });
-
 app.post('/scores', (_request: any, response: any) => {
   console.log(typeof _request.body);
   let json = _request.body
@@ -60,9 +50,6 @@ async function executeSQL(sqlString:string) {
   });
   return "something happened"
 }
-
-
-
 
 app.get('*', (_req, res) => {
 

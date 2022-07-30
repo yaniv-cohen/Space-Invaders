@@ -7,145 +7,53 @@ import math
 import requests
 import webbrowser
 import random
+from classes import *
+# from levels import *
 window_width  = 80
 window_height = 40
 message_pad_height =3
 message_pad_width = window_width
 
-ship  = ['@@@@@', 'l   l']
-class Aliens:
-    alien_spawn_count = 4
-
-    array = []
-    def print_all(self, window):
-        for enemy in self.array:
-            enemy.printEnemy(window)
-            
-class Enemy:
-    def __init__(self , yPos=0, xPos=0,yV=0,xV=0,hp=0,type=1):
-        self.type = type
-        self.yPos = yPos
-        self.xPos = xPos
-        self.vY = yV
-        self.vX = xV
-        self.hp = hp
-        self.color_id = 2
-
-    def printEnemy(self, window):
-        for count in range(self.type):
-            if(self.yPos-count>=0):
-                window.addstr(math.floor(self.yPos)-count, math.floor(self.xPos), "#"*self.type ,curses.color_pair(self.color_id)  )
-
-        
-        # window.addstr(math.floor(self.yPos), math.floor(self.xPos), "#"*self.type )
-        # if(self.yPos-1>=0):
-        #     window.addstr(math.floor(self.yPos)-1, math.floor(self.xPos),"#"*self.type +str(vars(self)))
-        #     if(self.yPos-2>=0):
-        #         window.addstr(math.floor(self.yPos)-2, math.floor(self.xPos),"#"*self.type +str(vars(self)))
-    def hit(self,damage):
-        self.hp -= damage
-        self.color_id =3
-        if(self.hp <= 0):
-            return True
-        else:
-            return False
+  
             #add delete me
-class Player_missile:
-    def __init__(self, yPos ,xPos, vY,vX, missile_tier):
-        self.yPos =yPos
-        self.xPos =xPos
-        self.vY   =vY
-        self.vX   =vX
-        self.missile_tier = missile_tier
-        self.missile_char = "|"
-    def print_missile(self, window):
-        window.addstr(math.floor(self.yPos), math.floor(self.xPos), self.missile_char)
-    def load_movement_return_kill(self):
-        self.xPos +=self.vX
-        if(self.yPos>0):
-            self.yPos +=self.vY
-            return False
-        else:
-            return True
-    def collision_detection(self, aliens):
-        for enemy in aliens.array:
-            if( enemy.yPos - self.yPos - 2 < enemy.type and enemy.yPos - self.yPos >=0   and   self.xPos - enemy.xPos - 2 < enemy.type and self.xPos - enemy.xPos >=0 ):
-                return enemy
 #contains all the enemy methods and objects.
 aliens = Aliens
 
-class Items:
-    array = []
-    size_dictionary = {"missile_upgrade": {'size':2, 'char': "+"},
-     "ammo-up" : {'size':3, 'char': "!"} ,
-      "coin" : {'size':1, 'char':'$'}}
-    def __init__(self):
-        self.array = []
-    def print_all(self, window):
-        for item in self.array:
-            item.print_item(window, self.size_dictionary)
 items = Items()
-
-class Item:
-    def __init__(self, yPos, xPos, vY, vX, type, size):
-        self.yPos =yPos
-        self.xPos =xPos
-        self.vY   =vY
-        self.vX   =vX
-        self.type =type
-        self.color_id =1
-        self.item_size = size
-
-    def print_item(self, window, dictionary):
-        for count in range(self.item_size):
-            if(self.yPos-count >= 0 and self.yPos < window_height 
-            and self.xPos < window_width and self.xPos > 0):
-                window.addstr(math.floor(self.yPos)-count, math.floor(self.xPos), "?"*self.item_size ,curses.color_pair(self.color_id)  )
-            # if(self.yPos-self.item_size>=0 and self.yPos < window_height 
-            # and self.xPos>=0 and self.xPos < window_height):
-            #     window.addstr(math.floor(self.yPos)-count, math.floor(self.xPos), "?"*self.item_size ,curses.color_pair(self.color_id)  )
-
-class Player:
-    xPos = 35
-    yPos = 35
-    xVelocity = 0
-    yVelocity = 0
-    missile_array = []
-    missile_tier=1
-    max_ammo = 8
-    ammo =max_ammo
-    score=0
-    def printShip(self, game_win):
-        game_win.addstr(round(self.yPos)    , round(player.xPos), ship[0])
-        game_win.addstr(self.yPos + 1, player.xPos, ship[1])
-    def add_missile(self, playerMissile):
-        self.missile_array.append(playerMissile)
-
-
 
 def  level_0():
     alien_count =1
-    missile_upgrade_count =1
+    missile_upgrade_count =3
+    ammo_upgrade_count =1
     for index in range(alien_count):
         yPos = 6*index
         xPos = 5
-        yV = 0.2
-        xV = 1
+        yV = 0.3
+        xV = 0
         hp = 2
         type = 8
         aliens.array.append(Enemy(int(yPos), int(xPos), yV, xV, hp, type))
     for index in range(missile_upgrade_count):
-        yPos =10
+        yPos =10+ 6*index
         xPos = 10
-        yV =1
-        xV = 2
+        yV =0.7
+        xV = 1
         type = "missile_upgrade"
+        size= items.size_dictionary[type]["size"]
+        items.array.append(Item(int(yPos), int(xPos), yV, xV, type, size))
+    for index in range(ammo_upgrade_count):
+        yPos =0 -index*5
+        xPos = 10+ index*8
+        yV = 0.5
+        xV = 0.8
+        type = "ammo_up"
         size= items.size_dictionary[type]["size"]
         items.array.append(Item(int(yPos), int(xPos), yV, xV, type, size))
 
 def  level_1():
     alien_count =4
-    missile_upgrade_count = 3
+    missile_upgrade_count = 1
+    ammo_upgrade_count =2
     for index in range(alien_count):
         yPos = 6*index
         xPos = 5 *index
@@ -163,9 +71,18 @@ def  level_1():
         type = "missile_upgrade"
         size= items.size_dictionary[type]["size"]
         items.array.append(Item(int(yPos), int(xPos), yV, xV, type, size))
-
+    for index in range(ammo_upgrade_count):
+        yPos =0 -index*5
+        xPos = 10+ index*8
+        yV = 0.5
+        xV = 0.8
+        type = "ammo_up"
+        size= items.size_dictionary[type]["size"]
+        items.array.append(Item(int(yPos), int(xPos), yV, xV, type, size))
 def  level_2():
     alien_count =4
+    missile_upgrade_count =2
+
     for index in range(alien_count):
         yPos = 6 - 2*index
         xPos = 7*index
@@ -174,9 +91,20 @@ def  level_2():
         hp = 2
         type = 4
         aliens.array.append(Enemy(int(yPos), int(xPos), yV, xV, hp, type))
-
+    for index in range(missile_upgrade_count):
+        yPos = 2*index +4
+        xPos = 5 *index -2
+        yV = 0.2
+        xV = 2
+        type = "missile_upgrade"
+        size= items.size_dictionary[type]["size"]
+        items.array.append(Item(int(yPos), int(xPos), yV, xV, type, size))
 def  level_3():
     alien_count =2
+    missile_upgrade_count =2
+
+    ammo_upgrade_count =2
+
     for index in range(alien_count):
         yPos = 0
         xPos = 14 *index
@@ -185,16 +113,6 @@ def  level_3():
         hp = 3
         type = 7
         aliens.array.append(Enemy(int(yPos), int(xPos), yV, xV, hp, type))
-    alien_count =3
-    for index in range(alien_count):
-        yPos = 6*index
-        xPos = 10 *index
-        yV = 0.5
-        xV = 1
-        hp = 1
-        type = 4
-        aliens.array.append(Enemy(int(yPos), int(xPos), yV, xV, hp, type))
-
     missile_upgrade_count = 3
     for index in range(missile_upgrade_count):
         yPos = 2*index +4
@@ -202,6 +120,14 @@ def  level_3():
         yV = 0.2
         xV = 2
         type = "missile_upgrade"
+        size= items.size_dictionary[type]["size"]
+        items.array.append(Item(int(yPos), int(xPos), yV, xV, type, size))
+    for index in range(ammo_upgrade_count):
+        yPos =0 -index*5
+        xPos = 10+ index*8
+        yV = 0.5
+        xV = 0.8
+        type = "ammo_up"
         size= items.size_dictionary[type]["size"]
         items.array.append(Item(int(yPos), int(xPos), yV, xV, type, size))
 def  end_screen():
@@ -245,7 +171,6 @@ levels_array.append(level_1)
 levels_array.append(level_2)
 levels_array.append(level_3)
 levels_array.append(end_screen)
-print(len(levels_array))
 time.sleep(1)
 def main(stdscr):
     stdscr.clear()
@@ -262,9 +187,10 @@ def main(stdscr):
     stdscr.bkgd(' ', curses.color_pair(2))
     levels_array.pop(0)()
 
+    #the game loop
     while 1:
         if(not game_running):
-            time.sleep(4)
+            time.sleep(3)
             break
         time.sleep(0.1)
         game_win.clear()
@@ -276,26 +202,26 @@ def main(stdscr):
         if(len(aliens.array)==0):
             message_pad.clear()
             
-            message_pad.addstr(0, 0, "LEVEL CLEARED!  " )
+            message_pad.addstr(0, 0, "LEVEL CLEARED!  ", curses.color_pair(1) )
             message_pad.addstr(0, 40, f"SCORE:{player.score}  " )
 
             message_pad.refresh( 0,0, 0, 0, 4, window_width)
-            time.sleep(2)
+            time.sleep(1)
             if(len(levels_array)>0):
                 message_pad.clear()
-                message_pad.addstr(0, 0, "STARTING NEXT LEVEL   " )
+                message_pad.addstr(0, 0, "STARTING NEXT LEVEL   ", curses.color_pair(3) )
                 message_pad.addstr(0, 40, f"SCORE:{player.score}  " )
 
                 levels_array.pop(0)()
             else:
                 message_pad.clear()
 
-                message_pad.addstr(0, 0, f"you WON!, Your SCORE is  : {player.score}  " )
+                message_pad.addstr(0, 0, f"you WON!, Your SCORE is  : {player.score}  " , curses.color_pair(3))
 
                 game_running = False
             message_pad.refresh( 0,0, 0, 0, 4, window_width)
 
-            time.sleep(2)
+            time.sleep(1)
         elif():
             #execute command for next level
             levels_array.pop()()
@@ -349,6 +275,7 @@ def main(stdscr):
             if(enemy.yPos>= player.yPos):
                 enemy.vY = 0
                 game_win.addstr(0, 30, "you lost!" )
+                end_screen()
                 game_running = False
 
             # stdscr.addstr(8+index, enemy.xPos,"alien "+"yPos " +str(enemy.yPos))
@@ -360,9 +287,9 @@ def main(stdscr):
             target = missile.collision_detection(aliens)
             if target:
                 # game_win.addstr(0, 40, "hit!" )
-                kil_enemy = target.hit(missile.missile_tier)
+                kil_enemy = target.hit(missile.missile_char)
                 if kil_enemy:
-                    player.score += (10-target.type)*100  
+                    player.score += max((10-target.type)*100, 100  )
                     message_pad.addstr(0, 20, f"+{player.score}" )
                     # game_win.addstr(2, 40, "kill me!" )
                     aliens.array.remove(target)
@@ -377,9 +304,6 @@ def main(stdscr):
         #print all items
         for index,item in enumerate(items.array):
             item.print_item(game_win , items.size_dictionary)
-            # if(enemy.yPos-1>=0):
-            #     game_win.addstr(math.floor(enemy.yPos)-1, math.floor(enemy.xPos),"##" +str(vars(enemy)))
-            game_win.addstr(0,50, f"{item.type} , {str(enemy.vY)}" )
 
             if(item.vY<0 and item.yPos + item.vY >= 0):
                 item.yPos += item.vY
@@ -401,16 +325,18 @@ def main(stdscr):
             if( item.yPos - player.yPos <= item.item_size and item.yPos -player.yPos >0 
             and  item.xPos - player.xPos  <= item.item_size + len(ship[0]) ):
                 game_win.addstr(0, 20, "item collected!")
-                player.max_ammo+=1
-                player.score+= 200
+                if(item.type=="ammo_up"):
+                    player.max_ammo+=1
+                    player.score+= 200
+                elif(item.type=="missile_upgrade"):
+                    if(len(player.upgrade_array)>0):
+                        player.missile_char = player.upgrade_array.pop(0)
                 items.array.remove(item)
 
 
         #display player ammo on screen
         game_win.addstr(0, 2, f"AMMO : {player.ammo}/{player.max_ammo}" )
-        
         game_win.refresh()
-
         stdscr.nodelay(True)
         key = stdscr.getch()
 
@@ -434,7 +360,7 @@ def main(stdscr):
             # check if I have ammo -
             if( player.ammo > 0):
                 #create new missile object
-                new_missile = Player_missile(player.yPos   ,player.xPos + math.floor(len(ship[0])/2) ,-1,0 , player.missile_tier)
+                new_missile = Player_missile(player.yPos   ,player.xPos + math.floor(len(ship[0])/2) ,-1,0 , player.missile_char)
                 player.add_missile(new_missile)
                 player.ammo-=1
 
@@ -443,7 +369,5 @@ def main(stdscr):
             game_win.addstr(0, 0, "You pressed home key!  ")
             break
         message_pad.refresh( 0,0, 0, 0, 4, window_width)
-        
-
 
 wrapper(main)

@@ -29,8 +29,8 @@
     </div>
   </main>
 
-  
-  <button id="postButton" > for manual score insertion </button>
+  <button onclick='fetch("/game").then(res=>res.text().then(res=>console.log(res))); console.log("fetching /game")'></button>
+
 
 </body>
 
